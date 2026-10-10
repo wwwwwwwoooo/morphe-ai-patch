@@ -1,0 +1,63 @@
+name: LyricBridge bundle release
+
+# Manual only: builds the patch bundle, publishes it as a GitHub release asset
+# and points patches-bundle.json at it so Morphe Manager picks up the new build.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g. lyricbridge-v1.46.0-preview.2)'
+        required: true
+      version:
+        description: 'Bundle version shown to Morphe Manager (e.g. 1.46.1)'
+        required: true
+
+jobs:
+  release:
+    name: Build and publish
+    permissions:
+      contents: write
+      packages: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Cache Gradle
+        uses: burrunan/gradle-cache-action@v3
+
+      - name: Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew :patches:buildAndroid --no-daemon -Pversion="${{ inputs.version }}"
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          mpp=$(ls patches/build/libs/*.mpp | head -n 1)
+          asset="lyricbridge-patches-${VERSION}.mpp"
+          cp "$mpp" "$asset"
+          sha256sum "$asset" > SHA256SUMS
+          gh release create "$TAG" "$asset" SHA256SUMS --target "$GITHUB_SHA" \
+            --title "LyricBridge ${VERSION}" \
+            --notes "LyricBridge patch bundle built from ${GITHUB_SHA}. Load the .mpp in Morphe Manager as a custom bundle."
+          url="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/${asset}"
+          jq --arg url "$url" --arg version "$VERSION" --arg now "$(date -u +%Y-%m-%dT%H:%M:%S)" \
+            --arg desc "## LyricBridge ${VERSION}"$'\n\n'"Built from ${GITHUB_SHA}." \
+            '.download_url=$url | .version=$version | .created_at=$now | .description=$desc' \
+            patches-bundle.json > patches-bundle.json.tmp
+          mv patches-bundle.json.tmp patches-bundle.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore: point bundle at LyricBridge ${VERSION} [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
