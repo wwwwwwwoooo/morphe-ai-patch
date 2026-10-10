@@ -640,7 +640,59 @@ Required cookies: SID, HSID, SSID, SAPISID, __Secure-3PAPISID, __Secure-1PAPISID
     <string name="morphe_music_lyrics_ai_config_status_empty_model">Model name cannot be empty</string>
     <string name="morphe_music_lyrics_ai_config_status_validating">Validating connection…</string>
 
+    <!-- layout.lyrics.aiLyricsTranslationPatch -->
+  <string name="morphe_music_lyrics_section_ai_sync_title">AI synced translation</string>
+  <string name="morphe_music_lyrics_ai_sync_translation_title">Enable AI synced translation</string>
+  <string name="morphe_music_lyrics_ai_sync_translation_summary">Translate complete songs with verified line IDs. Lyrics are sent to your selected AI provider. Original timing is preserved.</string>
+  <string name="morphe_music_lyrics_ai_auth_title">AI authentication</string>
+  <string name="morphe_music_lyrics_chatgpt_account_title">Connect ChatGPT account</string>
+  <string name="morphe_music_lyrics_chatgpt_account_summary">Connect, sign in again, choose an account or disconnect</string>
+  <string name="morphe_music_lyrics_chatgpt_model_title">ChatGPT model</string>
+  <string name="morphe_music_lyrics_chatgpt_model_summary">Choose from the current account model catalog</string>
+  <string name="morphe_music_lyrics_ai_target_language_title">AI translation language</string>
+  <string name="morphe_music_lyrics_ai_style_title">Translation style</string>
+  <string name="morphe_music_lyrics_ai_system_prompt_title">Custom translation instructions</string>
+  <string name="morphe_music_lyrics_ai_system_prompt_summary">Edit the system instructions for this feature</string>
+  <string name="morphe_music_lyrics_ai_auto_translate_title">Automatically translate lyrics</string>
+  <string name="morphe_music_lyrics_ai_auto_translate_summary">Translate when lyrics load; may use ChatGPT plan allowance or API credits</string>
+  <string name="morphe_music_lyrics_ai_sync_base_url_title">Alternative API endpoint</string>
+  <string name="morphe_music_lyrics_ai_sync_base_url_summary">HTTPS Chat Completions endpoint for API key authentication</string>
+  <string name="morphe_music_lyrics_ai_sync_api_token_title">Alternative API key</string>
+  <string name="morphe_music_lyrics_ai_sync_api_token_summary">Used only when API key authentication is selected</string>
+  <string name="morphe_music_lyrics_ai_sync_model_title">Alternative API model</string>
+  <string name="morphe_music_lyrics_ai_sync_model_summary">Model name for API key authentication</string>
+  <string name="morphe_music_lyrics_ai_clear_cache_title">Clear AI translation cache</string>
+  <string name="morphe_music_lyrics_ai_clear_cache_summary">Clear this feature translation cache only</string>
+  <string name="morphe_music_lyrics_chatgpt_continue">Continue with ChatGPT</string>
+  <string name="morphe_music_lyrics_chatgpt_reconsent">Enable ChatGPT plan usage</string>
+  <string name="morphe_music_lyrics_chatgpt_add_account">Add another ChatGPT account</string>
+  <string name="morphe_music_lyrics_chatgpt_select_account">Choose saved account</string>
+  <string name="morphe_music_lyrics_chatgpt_disconnect">Disconnect current account</string>
+  <string name="morphe_music_lyrics_chatgpt_cancel">Cancel sign-in</string>
+  <string name="morphe_music_lyrics_chatgpt_status_signed_out">Not connected</string>
+  <string name="morphe_music_lyrics_chatgpt_status_signing_in">Signing in using the system browser…</string>
+  <string name="morphe_music_lyrics_chatgpt_status_identity_only">Signed in; ChatGPT plan permission was not granted</string>
+  <string name="morphe_music_lyrics_chatgpt_status_connected">Connected; plan permission granted. Model and account eligibility are checked by OpenAI.</string>
+  <string name="morphe_music_lyrics_chatgpt_status_storage_error">Secure storage unavailable; sign-in cannot continue</string>
+  <string name="morphe_music_lyrics_chatgpt_login_failed">Sign-in failed. Check network, browser and loopback access, then retry.</string>
+  <string name="morphe_music_lyrics_chatgpt_revocation_unconfirmed">Local tokens cleared; remote revocation was not confirmed. Disconnect the app in ChatGPT Settings.</string>
+  <string name="morphe_music_lyrics_chatgpt_models_loading">Loading available models…</string>
+  <string name="morphe_music_lyrics_ai_error_auth">ChatGPT sign-in is required. API keys remain available in AI authentication settings.</string>
+  <string name="morphe_music_lyrics_ai_error_permission">ChatGPT plan usage is not authorized or this account, workspace, region or model is unsupported. Check account permissions.</string>
+  <string name="morphe_music_lyrics_ai_error_limit">AI usage limit reached. Check ChatGPT Settings → Usage or your API allowance.</string>
+  <string name="morphe_music_lyrics_ai_error_network">AI request failed or timed out. Original lyrics remain available.</string>
+  <string name="morphe_music_lyrics_ai_error_format">AI response could not be validated. Choose a model or regenerate the translation.</string>
+  <string name="morphe_music_lyrics_ai_cache_cleared">AI translation cache cleared</string>
+  <string name="morphe_music_lyrics_ai_cache_failed">Could not clear AI translation cache</string>
+  <string name="morphe_music_lyrics_ai_regenerate">Regenerate AI translation</string>
+  <string name="morphe_music_lyrics_ai_actions">AI translation</string>
+  <string name="morphe_music_lyrics_ai_original_only">Original only</string>
+  <string name="morphe_music_lyrics_ai_translation_only">Translation only</string>
+  <string name="morphe_music_lyrics_ai_original_translation">Original and translation</string>
+
     <!-- misc.spoof.appversion.spoofAppVersionPatch -->
     <string name="morphe_music_spoof_app_version_target_entry_8_23_51">8.23.51 - Disable bold icons</string>
     <string name="morphe_music_spoof_app_version_target_entry_9_13_51">9.13.51 - Restore Player Up next, Lyrics, and Related tabs</string>
+
+  <string name="morphe_music_lyrics_chatgpt_status_disconnecting">Disconnecting; new AI requests are paused…</string>
 </resources>

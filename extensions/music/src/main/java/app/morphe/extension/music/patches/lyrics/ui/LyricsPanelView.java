@@ -228,6 +228,7 @@ public final class LyricsPanelView extends FrameLayout implements LyricsManager.
     @Nullable
     private TrackInfo lastKnownTrack;
     private final Runnable refreshLabelResetRunnable = this::updateRefreshLabel;
+    private boolean freshAiTranslation;
     private boolean translateInProgress;
     private boolean romanizeInProgress;
     private int translateRequestId;
@@ -1291,6 +1292,14 @@ public final class LyricsPanelView extends FrameLayout implements LyricsManager.
                 },
                 true);
 
+        // Separate action; the existing provider refresh/search button keeps its behavior.
+        if (Settings.LYRICS_AI_SYNC_TRANSLATION.get()) {
+            TextView regenerate = createToolbarButton(buttonRow, true, REFRESH_ICON,
+                    view -> showAiTranslationActions(), null, true);
+            regenerate.setText("AI");
+            regenerate.setContentDescription(str("morphe_music_lyrics_ai_actions"));
+        }
+
         romanizeView = createToolbarButton(buttonRow, Settings.LYRICS_SHOW_ROMANIZE_BUTTON.get(),
                 APP_ROMANIZE_ICON,
                 view -> onRomanizeClicked(),
@@ -1504,6 +1513,7 @@ public final class LyricsPanelView extends FrameLayout implements LyricsManager.
                 handler.removeCallbacks(refreshLabelResetRunnable);
                 updateRefreshLabel();
             }
+            LyricsTranslator.cancel();
             lyrics = newLyrics;
             highlightedIndex = -1;
             pendingOldWordLineIndex = -1;
@@ -1553,10 +1563,16 @@ public final class LyricsPanelView extends FrameLayout implements LyricsManager.
                     } else {
                         showLyrics(newLyrics);
                         setOverlayVisible(true);
-                        if (Settings.LYRICS_TRANSLATE_ONLY.get()) {
-                            requestTranslateOnly(newLyrics);
-                        } else if (Settings.LYRICS_TRANSLATE.get()) {
-                            onTranslateClicked();
+                        if (Settings.LYRICS_AI_SYNC_TRANSLATION.get() && !Settings.LYRICS_AI_AUTO_TRANSLATE.get()) {
+                            // A saved ONLY mode must not block a manual request on the next song.
+                            Settings.LYRICS_TRANSLATE.save(false);
+                            Settings.LYRICS_TRANSLATE_ONLY.save(false);
+                        } else {
+                            if (Settings.LYRICS_TRANSLATE_ONLY.get()) {
+                                requestTranslateOnly(newLyrics);
+                            } else if (Settings.LYRICS_TRANSLATE.get() || Settings.LYRICS_AI_SYNC_TRANSLATION.get()) {
+                                onTranslateClicked();
+                            }
                         }
                         if (Settings.LYRICS_ROMANIZE_ONLY.get()) {
                             requestRomanizeOnly(newLyrics);
@@ -2464,7 +2480,7 @@ public final class LyricsPanelView extends FrameLayout implements LyricsManager.
         try {
             // The saved translation state outlives the button, so a track change can
             // auto translate when there is no button to drive the translation from.
-            if (translateView == null) {
+            if (translateView == null && !Settings.LYRICS_AI_SYNC_TRANSLATION.get()) {
                 return;
             }
             if (onlyMode != OnlyMode.NONE
@@ -2497,7 +2513,7 @@ public final class LyricsPanelView extends FrameLayout implements LyricsManager.
             final int requestId = ++translateRequestId;
             setButtonLabel(translateView, str("morphe_music_lyrics_translating"), true);
 
-            LyricsTranslator.translate(track, current, current.providerName(),
+            LyricsTranslator.translate(track, current, current.providerName(), takeFreshAiTranslation(),
                     (lines, fromGoogle, fromAI, model) -> {
                 if (requestId != translateRequestId || !translateInProgress) {
                     return;
@@ -2515,7 +2531,7 @@ public final class LyricsPanelView extends FrameLayout implements LyricsManager.
                 if (translatedFromAI && model != null) {
                     translatedAiModel = model;
                 }
-                if (lines == null) {
+                if (lines == null && !Settings.LYRICS_AI_SYNC_TRANSLATION.get()) {
                     Utils.showToastShort(str("morphe_music_lyrics_translate_failed"));
                 }
                 showLyrics(current);
@@ -2532,7 +2548,7 @@ public final class LyricsPanelView extends FrameLayout implements LyricsManager.
 
     private void onTranslateLongPressed() {
         try {
-            if (translateView == null) {
+            if (translateView == null && !Settings.LYRICS_AI_SYNC_TRANSLATION.get()) {
                 return;
             }
             if (onlyMode == OnlyMode.TRANS || Settings.LYRICS_TRANSLATE_ONLY.get()) {
@@ -2610,7 +2626,7 @@ public final class LyricsPanelView extends FrameLayout implements LyricsManager.
         final int requestId = ++translateRequestId;
         setButtonLabel(translateView, str("morphe_music_lyrics_translating"), true);
 
-        LyricsTranslator.translate(track, current, current.providerName(),
+        LyricsTranslator.translate(track, current, current.providerName(), takeFreshAiTranslation(),
                 (lines, fromGoogle, fromAI, model) -> {
             if (requestId != translateRequestId || !Settings.LYRICS_TRANSLATE_ONLY.get()) {
                 return;
@@ -2626,7 +2642,9 @@ public final class LyricsPanelView extends FrameLayout implements LyricsManager.
                 translatedAiModel = model;
             }
             if (translatedLines == null) {
-                Utils.showToastShort(str("morphe_music_lyrics_translate_failed"));
+                if (!Settings.LYRICS_AI_SYNC_TRANSLATION.get()) {
+                    Utils.showToastShort(str("morphe_music_lyrics_translate_failed"));
+                }
                 clearTranslateOnlyState();
                 showLyrics(current);
                 updateTranslateLabel();
@@ -2685,8 +2703,57 @@ public final class LyricsPanelView extends FrameLayout implements LyricsManager.
         }
     }
 
+    private boolean takeFreshAiTranslation() {
+        boolean fresh = freshAiTranslation;
+        freshAiTranslation = false;
+        return fresh;
+    }
+
+    private void showAiTranslationActions() {
+        if (lyrics == null) return;
+        String[] actions = {str("morphe_music_lyrics_ai_original_only"),
+                str("morphe_music_lyrics_ai_translation_only"), str("morphe_music_lyrics_ai_original_translation"),
+                str("morphe_music_lyrics_ai_regenerate")};
+        new android.app.AlertDialog.Builder(getContext())
+                .setTitle(str("morphe_music_lyrics_ai_actions"))
+                .setItems(actions, (dialog, which) -> {
+                    if (lyrics == null) return;
+                    if (which == 3) { regenerateAiTranslation(); return; }
+                    clearRomanizeOnlyState();
+                    if (which == 0) {
+                        clearTranslateOnlyState();
+                        Settings.LYRICS_TRANSLATE.save(false);
+                        showLyrics(lyrics);
+                    } else if (which == 1) {
+                        if (translateInProgress) cancelNormalTranslate();
+                        requestTranslateOnly(lyrics);
+                    } else {
+                        Settings.LYRICS_TRANSLATE_ONLY.save(false);
+                        onlyMode = OnlyMode.NONE;
+                        applyOnlyModeState();
+                        if (translatedLines != null) {
+                            Settings.LYRICS_TRANSLATE.save(true);
+                            showLyrics(lyrics);
+                        } else if (!translateInProgress) onTranslateClicked();
+                    }
+                    updateTranslateLabel();
+                }).show();
+    }
+
+    private void regenerateAiTranslation() {
+        if (lyrics == null || !Settings.LYRICS_AI_SYNC_TRANSLATION.get()) return;
+        boolean only = Settings.LYRICS_TRANSLATE_ONLY.get();
+        cancelNormalTranslate();
+        Settings.LYRICS_ROMANIZE_ONLY.save(false);
+        onlyMode = OnlyMode.NONE;
+        freshAiTranslation = true;
+        if (only) requestTranslateOnly(lyrics);
+        else { Settings.LYRICS_TRANSLATE_ONLY.save(false); onTranslateClicked(); }
+    }
+
     /** Invalidates an in-flight normal translation and clears its data flags. */
     private void cancelNormalTranslate() {
+        LyricsTranslator.cancel();
         translateRequestId++;
         translateInProgress = false;
         Settings.LYRICS_TRANSLATE.save(false);

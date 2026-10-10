@@ -418,6 +418,7 @@ public final class LyricsManager {
             return;
         }
 
+        LyricsTranslator.cancel();
         currentTrack = track;
         currentVideoId = videoId;
         resetPosition();
@@ -471,6 +472,7 @@ public final class LyricsManager {
             return;
         }
 
+        LyricsTranslator.cancel();
         currentTrack = new TrackInfo(cleanedTitle, cleanedArtist, "", 0);
         currentMediaUri = mediaUri;
         resetPosition();

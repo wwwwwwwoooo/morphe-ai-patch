@@ -152,4 +152,24 @@
         <item>9.13.51</item>
     </string-array>
 
+
+  <!-- layout.lyrics.aiLyricsTranslationPatch -->
+  <string-array name="morphe_music_lyrics_ai_auth_entries">
+    <item>ChatGPT account</item>
+    <item>API key</item>
+  </string-array>
+  <string-array name="morphe_music_lyrics_ai_auth_entry_values">
+    <item>chatgpt</item>
+    <item>api_key</item>
+  </string-array>
+  <string-array name="morphe_music_lyrics_ai_style_entries">
+    <item>Natural</item>
+    <item>Literal</item>
+    <item>Poetic</item>
+  </string-array>
+  <string-array name="morphe_music_lyrics_ai_style_entry_values">
+    <item>natural</item>
+    <item>literal</item>
+    <item>poetic</item>
+  </string-array>
 </resources>

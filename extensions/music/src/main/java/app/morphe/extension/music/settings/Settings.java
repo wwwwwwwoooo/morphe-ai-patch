@@ -208,6 +208,18 @@ public class Settings extends SharedYouTubeSettings {
     public static final StringSetting LYRICS_AI_API_TOKEN = new StringSetting("morphe_music_lyrics_ai_api_token", "", true, parent(LYRICS_USE_AI_TRANSLATION));
     public static final StringSetting LYRICS_AI_MODEL = new StringSetting("morphe_music_lyrics_ai_model", "openai-fast", true, parent(LYRICS_USE_AI_TRANSLATION));
     public static final StringSetting LYRICS_AI_PROMPT = new StringSetting("morphe_music_lyrics_ai_prompt", OpenAIClient.DEFAULT_PROMPT, true, parent(LYRICS_USE_AI_TRANSLATION));
+
+    // Independent of the existing OpenAI-compatible translation/romanization feature.
+    public static final BooleanSetting LYRICS_AI_SYNC_TRANSLATION = new BooleanSetting("morphe_music_lyrics_ai_sync_translation", FALSE, true, parent(LYRICS_ENABLED));
+    public static final StringSetting LYRICS_AI_AUTH = new StringSetting("morphe_music_lyrics_ai_auth", "chatgpt", true, parent(LYRICS_AI_SYNC_TRANSLATION));
+    public static final StringSetting LYRICS_CHATGPT_MODEL = new StringSetting("morphe_music_lyrics_chatgpt_model", "", true, parent(LYRICS_AI_SYNC_TRANSLATION));
+    public static final StringSetting LYRICS_AI_TARGET_LANGUAGE = new StringSetting("morphe_music_lyrics_ai_target_language", "ko", true, parent(LYRICS_AI_SYNC_TRANSLATION));
+    public static final StringSetting LYRICS_AI_STYLE = new StringSetting("morphe_music_lyrics_ai_style", "natural", true, parent(LYRICS_AI_SYNC_TRANSLATION));
+    public static final StringSetting LYRICS_AI_SYSTEM_PROMPT = new StringSetting("morphe_music_lyrics_ai_system_prompt", app.morphe.extension.music.patches.lyrics.ai.TranslationFormat.DEFAULT_INSTRUCTIONS, true, parent(LYRICS_AI_SYNC_TRANSLATION));
+    public static final BooleanSetting LYRICS_AI_AUTO_TRANSLATE = new BooleanSetting("morphe_music_lyrics_ai_auto_translate", FALSE, true, parent(LYRICS_AI_SYNC_TRANSLATION));
+    public static final StringSetting LYRICS_AI_SYNC_BASE_URL = new StringSetting("morphe_music_lyrics_ai_sync_base_url", "https://api.openai.com/v1/chat/completions", true, parent(LYRICS_AI_SYNC_TRANSLATION));
+    public static final StringSetting LYRICS_AI_SYNC_API_TOKEN = new StringSetting("morphe_music_lyrics_ai_sync_api_token", "", true, false, null, parent(LYRICS_AI_SYNC_TRANSLATION));
+    public static final StringSetting LYRICS_AI_SYNC_MODEL = new StringSetting("morphe_music_lyrics_ai_sync_model", "gpt-4o-mini", true, parent(LYRICS_AI_SYNC_TRANSLATION));
     public static final BooleanSetting LYRICS_SHOW_ROMANIZE_BUTTON = new BooleanSetting("morphe_music_lyrics_show_romanize_button", TRUE, true, parent(LYRICS_ENABLED));
     public static final BooleanSetting LYRICS_SHOW_REFRESH_BUTTON = new BooleanSetting("morphe_music_lyrics_show_refresh_button", TRUE, true, parent(LYRICS_ENABLED));
     public static final BooleanSetting LYRICS_HIDE_INFO = new BooleanSetting("morphe_music_lyrics_hide_info", FALSE, true, parent(LYRICS_ENABLED));

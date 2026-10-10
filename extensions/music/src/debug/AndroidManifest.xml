@@ -1,0 +1,4 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Standalone instrumentation target only; patched YouTube Music already has this permission. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+</manifest>

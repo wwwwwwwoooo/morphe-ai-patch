@@ -4,8 +4,10 @@ group = "app.morphe"
 
 patches {
     about {
-        name = "Morphe Patches"
-        description = "Patches for Morphe"
+        name = providers.gradleProperty("patchBundleName").getOrElse("Morphe Patches")
+        description = if (providers.gradleProperty("patchBundleName").isPresent)
+            "Local AI lyrics extension build, based on MorpheApp/morphe-patches"
+        else "Patches for Morphe"
         source = "git@github.com:MorpheApp/morphe-patches.git"
         author = "MorpheApp"
         contact = "na"
@@ -78,4 +80,10 @@ tasks {
     publish {
         dependsOn("generatePatchesList")
     }
+}
+
+// Keep the upstream notices with custom binary distributions.
+tasks.named<Jar>("jar") {
+    from(rootProject.file("LICENSE"))
+    from(rootProject.file("NOTICE"))
 }

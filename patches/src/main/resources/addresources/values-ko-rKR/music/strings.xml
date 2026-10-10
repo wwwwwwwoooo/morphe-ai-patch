@@ -592,7 +592,59 @@ LOGIN_INFO"</string>
   <string name="morphe_music_lyrics_ai_config_status_invalid_url">기본 URL은 http:// 또는 https://로 시작해야 합니다</string>
   <string name="morphe_music_lyrics_ai_config_status_empty_model">모델 이름은 비워둘 수 없습니다</string>
   <string name="morphe_music_lyrics_ai_config_status_validating">연결 유효성을 검사하는 중…</string>
+    <!-- layout.lyrics.aiLyricsTranslationPatch -->
+  <string name="morphe_music_lyrics_section_ai_sync_title">AI 동기화 가사 번역</string>
+  <string name="morphe_music_lyrics_ai_sync_translation_title">AI 동기화 가사 번역 활성화</string>
+  <string name="morphe_music_lyrics_ai_sync_translation_summary">곡 전체를 구간 ID로 검증하여 번역합니다. 가사를 선택한 AI 제공업체로 전송하며 원래 타임스탬프를 유지합니다.</string>
+  <string name="morphe_music_lyrics_ai_auth_title">AI 인증 방식</string>
+  <string name="morphe_music_lyrics_chatgpt_account_title">ChatGPT 계정 연결</string>
+  <string name="morphe_music_lyrics_chatgpt_account_summary">계정 연결, 재로그인, 계정 선택 또는 연결 해제</string>
+  <string name="morphe_music_lyrics_chatgpt_model_title">ChatGPT AI 모델 선택</string>
+  <string name="morphe_music_lyrics_chatgpt_model_summary">현재 계정에서 사용 가능한 모델 선택</string>
+  <string name="morphe_music_lyrics_ai_target_language_title">AI 기본 번역 언어</string>
+  <string name="morphe_music_lyrics_ai_style_title">번역 스타일</string>
+  <string name="morphe_music_lyrics_ai_system_prompt_title">사용자 지정 번역 지침</string>
+  <string name="morphe_music_lyrics_ai_system_prompt_summary">이 기능의 기본 시스템 지침을 편집합니다</string>
+  <string name="morphe_music_lyrics_ai_auto_translate_title">자동 번역</string>
+  <string name="morphe_music_lyrics_ai_auto_translate_summary">가사가 로드되면 번역합니다. ChatGPT 요금제 사용량 또는 API 크레딧을 사용합니다</string>
+  <string name="morphe_music_lyrics_ai_sync_base_url_title">대체 API 엔드포인트</string>
+  <string name="morphe_music_lyrics_ai_sync_base_url_summary">API 키 인증 시 사용할 HTTPS Chat Completions 주소</string>
+  <string name="morphe_music_lyrics_ai_sync_api_token_title">대체 API 키</string>
+  <string name="morphe_music_lyrics_ai_sync_api_token_summary">API 키 인증 방식을 선택했을 때만 사용합니다</string>
+  <string name="morphe_music_lyrics_ai_sync_model_title">대체 API 모델</string>
+  <string name="morphe_music_lyrics_ai_sync_model_summary">API 키 인증 시 사용할 모델 이름</string>
+  <string name="morphe_music_lyrics_ai_clear_cache_title">AI 번역 캐시 삭제</string>
+  <string name="morphe_music_lyrics_ai_clear_cache_summary">이 기능의 번역 캐시를 삭제합니다</string>
+  <string name="morphe_music_lyrics_chatgpt_continue">ChatGPT로 계속하기</string>
+  <string name="morphe_music_lyrics_chatgpt_reconsent">ChatGPT 요금제 사용 권한 승인</string>
+  <string name="morphe_music_lyrics_chatgpt_add_account">다른 ChatGPT 계정 추가</string>
+  <string name="morphe_music_lyrics_chatgpt_select_account">저장된 계정 선택</string>
+  <string name="morphe_music_lyrics_chatgpt_disconnect">현재 계정 연결 해제</string>
+  <string name="morphe_music_lyrics_chatgpt_cancel">로그인 취소</string>
+  <string name="morphe_music_lyrics_chatgpt_status_signed_out">연결되지 않음</string>
+  <string name="morphe_music_lyrics_chatgpt_status_signing_in">시스템 브라우저에서 로그인 중…</string>
+  <string name="morphe_music_lyrics_chatgpt_status_identity_only">로그인됨 · ChatGPT 요금제 사용 권한 미승인</string>
+  <string name="morphe_music_lyrics_chatgpt_status_connected">연결됨 · 요금제 사용 권한 승인. 모델 및 계정 이용 가능 여부는 OpenAI에서 확인합니다.</string>
+  <string name="morphe_music_lyrics_chatgpt_status_storage_error">보안 저장소를 사용할 수 없어 로그인을 진행할 수 없습니다</string>
+  <string name="morphe_music_lyrics_chatgpt_login_failed">로그인 실패. 네트워크, 브라우저와 루프백 접근을 확인하고 다시 시도하세요.</string>
+  <string name="morphe_music_lyrics_chatgpt_revocation_unconfirmed">로컬 토큰을 삭제했지만 서버의 세션 해제를 확인하지 못했습니다. ChatGPT 설정에서 앱 연결을 해제하세요.</string>
+  <string name="morphe_music_lyrics_chatgpt_models_loading">사용 가능한 모델 목록 불러오는 중…</string>
+  <string name="morphe_music_lyrics_ai_error_auth">ChatGPT 재로그인이 필요합니다. AI 인증 설정에서 API 키 방식도 선택할 수 있습니다.</string>
+  <string name="morphe_music_lyrics_ai_error_permission">ChatGPT 요금제 사용 권한이 없거나 계정·워크스페이스·지역·모델이 지원되지 않습니다. 계정 권한을 확인하세요.</string>
+  <string name="morphe_music_lyrics_ai_error_limit">AI 사용량 제한에 도달했습니다. ChatGPT 설정 → 사용량 또는 API 사용량을 확인하세요.</string>
+  <string name="morphe_music_lyrics_ai_error_network">AI 요청에 실패했거나 시간이 초과되었습니다. 원문 가사는 계속 표시됩니다.</string>
+  <string name="morphe_music_lyrics_ai_error_format">AI 응답을 검증하지 못했습니다. 모델을 선택하거나 번역을 새로 생성하세요.</string>
+  <string name="morphe_music_lyrics_ai_cache_cleared">AI 번역 캐시를 삭제했습니다</string>
+  <string name="morphe_music_lyrics_ai_cache_failed">AI 번역 캐시를 삭제하지 못했습니다</string>
+  <string name="morphe_music_lyrics_ai_regenerate">AI 번역 새로 생성</string>
+  <string name="morphe_music_lyrics_ai_actions">AI 가사 번역</string>
+  <string name="morphe_music_lyrics_ai_original_only">원문만 보기</string>
+  <string name="morphe_music_lyrics_ai_translation_only">번역만 보기</string>
+  <string name="morphe_music_lyrics_ai_original_translation">원문 + 번역 함께 보기</string>
+
   <!-- misc.spoof.appversion.spoofAppVersionPatch -->
   <string name="morphe_music_spoof_app_version_target_entry_8_23_51">8.23.51 - 굵은 아이콘을 비활성화합니다</string>
   <string name="morphe_music_spoof_app_version_target_entry_9_13_51">9.13.51 - 플레이어에서 \'다음 트랙\', \'가사\' 및 \'관련 항목\' 탭을 복원합니다</string>
+
+  <string name="morphe_music_lyrics_chatgpt_status_disconnecting">연결 해제 중 · 새 AI 요청을 중지했습니다…</string>
 </resources>

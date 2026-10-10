@@ -34,7 +34,8 @@ public final class LyricsTranslator {
     }
 
     private static String translationLanguage() {
-        String language = Settings.LYRICS_TRANSLATION_LANGUAGE.get();
+        String language = Settings.LYRICS_AI_SYNC_TRANSLATION.get()
+                ? Settings.LYRICS_AI_TARGET_LANGUAGE.get() : Settings.LYRICS_TRANSLATION_LANGUAGE.get();
         return "DEFAULT".equalsIgnoreCase(language)
                 ? LyricsRequests.deviceLanguage()
                 : language.toLowerCase(Locale.ROOT);
@@ -87,7 +88,15 @@ public final class LyricsTranslator {
         return (idx >= 0 ? lang.substring(0, idx) : lang).toLowerCase(Locale.ROOT);
     }
 
+    public static void cancel() {
+        app.morphe.extension.music.patches.lyrics.ai.LyricsTranslationEngine.cancel();
+    }
+
     public static void translate(TrackInfo track, Lyrics lyrics, String source, Callback callback) {
+        translate(track, lyrics, source, false, callback);
+    }
+
+    public static void translate(TrackInfo track, Lyrics lyrics, String source, boolean fresh, Callback callback) {
         Utils.verifyOnMainThread();
 
         List<String> lines = new ArrayList<>(lyrics.lines().size());
@@ -96,6 +105,13 @@ public final class LyricsTranslator {
         }
 
         String language = translationLanguage();
+
+        if (Settings.LYRICS_AI_SYNC_TRANSLATION.get()) {
+            app.morphe.extension.music.patches.lyrics.ai.LyricsTranslationEngine.translate(
+                    app.morphe.extension.music.shared.VideoInformation.getVideoId(), track, source,
+                    lines, language, fresh, (result, model) -> callback.onTranslated(result, false, result != null, model));
+            return;
+        }
 
         List<String> embedded = embeddedTranslation(lyrics, language, lines.size());
         if (embedded != null) {
