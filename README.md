@@ -11,7 +11,7 @@ Morphe YouTube Music에 ChatGPT 계정 연결과 동기화 AI 가사 번역을 �
 
 ## 다운로드와 적용
 
-[Releases](https://github.com/wwwwwwwoooo/lyricbridge-patches/releases)에서 `.mpp` 패치 번들을 다운로드하고 Morphe Manager의 사용자 지정 번들로 불러옵니다. YouTube Music 원본 APK에 `AI synced lyrics translation`과 의존성 `Third-party lyrics`를 적용합니다. 번들은 설치용 YouTube Music APK가 아닙니다.
+[Releases](https://github.com/wwwwwwwoooo/morphe-ai-patch/releases)에서 `.mpp` 패치 번들을 다운로드하고 Morphe Manager의 사용자 지정 번들로 불러옵니다. YouTube Music 원본 APK에 `AI synced lyrics translation`과 의존성 `Third-party lyrics`를 적용합니다. 번들은 설치용 YouTube Music APK가 아닙니다.
 
 Android 8.0 이상, 안정 대상 YouTube Music **9.15.51 / 9.20.53**, 실험 대상 **9.38.51 / 9.39.52 / 9.40.51**을 지원 목록으로 사용합니다.
 
@@ -37,7 +37,7 @@ Android SDK 없이 프로토콜 단위 테스트만 실행:
 ./gradlew -p tools/ai-lyrics-tests test --no-daemon
 ```
 
-이 사용자 지정 저장소를 배포할 때에는 원본 프로젝트의 자동 릴리스·번역 동기화 워크플로가 실행되지 않도록 GitHub Actions를 비활성화합니다. 자세한 빌드 환경과 검증 한계는 위 문서를 참고하세요.
+초기 코드 업로드 커밋은 `[skip ci]`로 CI 실행을 건너뜁니다. 원본의 워크플로 파일은 보존되어 있으며, 이후 업로드나 수동 실행 전에 사용자 지정 배포에 맞는 설정을 검토하세요. 자세한 빌드 환경과 검증 한계는 위 문서를 참고하세요.
 
 ## 라이선스와 출처
 
