@@ -130,6 +130,7 @@ public final class ChatGptSession {
                     }
                 });
                 Map<String, String> query = receiver.await(attempt.state(), pending);
+                pending.restartDeadline(); // Browser time must not consume the token exchange budget.
                 String client = OAuthProtocol.callbackClient(attempt, query);
                 synchronized (this) { if (attempt.subject() == null) provisionalClient = client; }
                 JSONObject tokens = new OAuthTokenClient().code(attempt, query, pending);

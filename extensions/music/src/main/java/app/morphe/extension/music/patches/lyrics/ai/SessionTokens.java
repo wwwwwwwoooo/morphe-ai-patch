@@ -17,12 +17,13 @@ public final class SessionTokens {
         if (!"Bearer".equalsIgnoreCase(response.getString("token_type"))
                 || response.getString("access_token").isEmpty() || response.getLong("expires_in") <= 0)
             throw OAuthProtocol.protocol("invalid_token_response");
+        // The previous refresh token may already be consumed, so a missing rotation ends the session.
         if (refresh && response.optString("refresh_token").isEmpty())
-            throw OAuthProtocol.protocol("missing_rotated_refresh_token");
+            throw new AiException(AiException.Kind.AUTH, 401, "missing_rotated_refresh_token", null);
         JSONObject next = new JSONObject(previous.toString());
         next.put("access_token", response.getString("access_token"));
         next.put("expires_at", now + response.getLong("expires_in"));
-        next.put("scope", response.has("scope") ? response.getString("scope") : refresh ? previous.getString("scope") : "");
+        next.put("scope", response.has("scope") ? response.getString("scope") : refresh ? previous.getString("scope") : OAuthProtocol.SCOPES);
         next.put("refresh_token", response.optString("refresh_token", ""));
         if (response.has("id_token")) next.put("id_token", response.getString("id_token"));
         if (response.has("earliest_refresh_at")) next.put("earliest_refresh_at", response.get("earliest_refresh_at"));
@@ -30,7 +31,7 @@ public final class SessionTokens {
     }
     public static boolean terminal(String code) {
         return Arrays.asList("invalid_grant", "invalid_refresh_token", "token_expired", "refresh_token_expired",
-                "refresh_token_invalidated", "refresh_token_reused").contains(code);
+                "refresh_token_invalidated", "refresh_token_reused", "missing_rotated_refresh_token").contains(code);
     }
     public static void clear(JSONObject record) {
         for (String key : new String[]{"access_token", "refresh_token", "id_token", "scope", "expires_at", "earliest_refresh_at"})

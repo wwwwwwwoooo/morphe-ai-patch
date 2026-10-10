@@ -126,8 +126,31 @@ class AiProtocolTest {
         assertEquals("old",old.getString("refresh_token"));
         response.put("scope","openid profile email"); assertFalse(SessionTokens.direct(SessionTokens.replace(old,response,1000,true)));
         response.remove("refresh_token"); assertThrows(AiException.class, () -> SessionTokens.replace(old,response,1000,true));
+        var unrotated = assertThrows(AiException.class, () -> SessionTokens.replace(old,response,1000,true));
+        assertEquals(AiException.Kind.AUTH, unrotated.kind); assertTrue(SessionTokens.terminal(unrotated.code));
         assertTrue(SessionTokens.terminal("refresh_token_reused")); assertFalse(SessionTokens.terminal("http_503"));
         SessionTokens.clear(next); assertEquals("issued",next.getString("client_id")); assertFalse(next.has("access_token"));
+    }
+    @Test void omittedScopeMeansRequestedScope() throws Exception {
+        var response = new JSONObject().put("token_type","Bearer").put("access_token","a")
+                .put("refresh_token","r").put("expires_in",3600);
+        assertTrue(SessionTokens.direct(SessionTokens.replace(new JSONObject(), response, 1000, false)));
+    }
+    @Test void restartedDeadlineAndFailingDisconnectAreSafe() throws Exception {
+        var cancel = new RequestCancellation(); cancel.restartDeadline(); cancel.check();
+        var conn = new java.net.HttpURLConnection(new java.net.URL("https://example.invalid")) {
+            @Override public void disconnect() { throw new IllegalStateException("main thread"); }
+            @Override public boolean usingProxy() { return false; }
+            @Override public void connect() { }
+        };
+        cancel.attach(conn); cancel.cancel(); assertTrue(cancel.isCancelled());
+    }
+    @Test void unwrapsMarkdownFenceOnly() throws Exception {
+        assertEquals(List.of("번역","","번역","번역"), TranslationFormat.parse(
+                TranslationFormat.unwrap("```json\n" + translation() + "\n```"), LINES));
+        assertEquals(translation(), TranslationFormat.unwrap(translation()));
+        assertThrows(AiException.class, () -> TranslationFormat.parse(
+                TranslationFormat.unwrap("Here you go:\n```json\n" + translation() + "\n```"), LINES));
     }
     @Test void tokenClientUsesIssuedIdExactRedirectAndDoesNotRetryRefresh() throws Exception {
         List<String> requests = new ArrayList<>();
@@ -166,6 +189,8 @@ class AiProtocolTest {
         assertEquals(AiException.Kind.AUTH, AiException.remote(401, "http_401", "request").kind);
         assertEquals(AiException.Kind.PERMISSION, AiException.remote(403, "subscription_sharing_user_not_eligible", null).kind);
         assertEquals(AiException.Kind.LIMIT, AiException.remote(429, "subscription_sharing_usage_limit_exceeded", null).kind);
+        assertEquals(AiException.Kind.LIMIT, AiException.remote(0, "rate_limit_exceeded", null).kind);
+        assertEquals(AiException.Kind.LIMIT, AiException.remote(0, "insufficient_quota", null).kind);
         assertEquals(AiException.Kind.NETWORK, AiException.remote(0, "subscription_sharing_usage_unavailable", null).kind);
         assertEquals(AiException.Kind.PROTOCOL, AiException.remote(400, "subscription_sharing_unsupported_capability", null).kind);
     }

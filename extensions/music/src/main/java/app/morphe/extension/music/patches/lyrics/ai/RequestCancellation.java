@@ -9,7 +9,8 @@ import java.io.InterruptedIOException;
 import java.net.HttpURLConnection;
 
 public final class RequestCancellation {
-    private final long deadline = System.nanoTime() + 180_000_000_000L;
+    private static final long TIMEOUT_NANOS = 180_000_000_000L;
+    private volatile long deadline = System.nanoTime() + TIMEOUT_NANOS;
     private volatile boolean cancelled;
     private HttpURLConnection connection;
     private Closeable listener;
@@ -19,6 +20,8 @@ public final class RequestCancellation {
         if (cancelled || Thread.currentThread().isInterrupted()) throw new InterruptedIOException("Cancelled");
     }
     public boolean isCancelled() { return cancelled; }
+    /** Starts a new time budget, e.g. after waiting on the user in the browser. */
+    public void restartDeadline() { deadline = System.nanoTime() + TIMEOUT_NANOS; }
     public synchronized void attach(HttpURLConnection next) throws InterruptedIOException {
         check(); connection = next;
     }
@@ -28,7 +31,8 @@ public final class RequestCancellation {
     public synchronized void detach() { connection = null; }
     public synchronized void cancel() {
         cancelled = true;
-        if (connection != null) connection.disconnect();
+        // Runs on the main thread; a failing disconnect must not abort the caller's state reset.
+        if (connection != null) try { connection.disconnect(); } catch (Exception ignored) { }
         if (listener != null) try { listener.close(); } catch (Exception ignored) { }
     }
     public void backoff(int attempt) throws InterruptedIOException {

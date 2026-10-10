@@ -90,6 +90,7 @@ public final class LyricsTranslationEngine {
                                     apiKey == null || apiKey.isEmpty() ? null : apiKey, job.cancel, true);
                             response = json.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
                         }
+                        response = TranslationFormat.unwrap(response);
                         result = TranslationFormat.parse(response, lines);
                         job.cancel.check();
                         try { disk.write(key, response, lines, generation); } catch (Exception ignored) { /* Display even if disk is full. */ }

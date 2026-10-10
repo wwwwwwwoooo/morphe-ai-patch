@@ -25,7 +25,8 @@ public final class AiException extends IOException {
     public static AiException remote(int status, String code, String requestId) {
         Kind kind = status == 401 ? Kind.AUTH : status == 403 ? Kind.PERMISSION
                 : status == 429 ? Kind.LIMIT : status >= 500 ? Kind.NETWORK : Kind.PROTOCOL;
-        if ("subscription_sharing_usage_limit_exceeded".equals(code)) kind = Kind.LIMIT;
+        if ("subscription_sharing_usage_limit_exceeded".equals(code) || "rate_limit_exceeded".equals(code)
+                || "insufficient_quota".equals(code) || "usage_limit_reached".equals(code)) kind = Kind.LIMIT;
         if ("subscription_sharing_user_not_eligible".equals(code)
                 || code.startsWith("chatpass_v2_")) kind = Kind.PERMISSION;
         if (code.endsWith("_unavailable")) kind = Kind.NETWORK;
