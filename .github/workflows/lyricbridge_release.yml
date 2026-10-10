@@ -48,7 +48,7 @@ jobs:
           asset="lyricbridge-patches-${VERSION}.mpp"
           cp "$mpp" "$asset"
           sha256sum "$asset" > SHA256SUMS
-          gh release create "$TAG" "$asset" SHA256SUMS --target "$GITHUB_SHA" \
+          gh release create "$TAG" "$asset" SHA256SUMS --target "$GITHUB_SHA" --prerelease \
             --title "LyricBridge ${VERSION}" \
             --notes "LyricBridge patch bundle built from ${GITHUB_SHA}. Load the .mpp in Morphe Manager as a custom bundle."
           url="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/${asset}"
