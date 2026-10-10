@@ -4,7 +4,6 @@
  */
 package app.morphe.extension.music.settings.preference;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.preference.Preference;
 import android.util.AttributeSet;
@@ -39,8 +38,7 @@ public final class ChatGptAccountPreference extends Preference {
         String[] actions = {str("morphe_music_lyrics_chatgpt_continue"), str("morphe_music_lyrics_chatgpt_reconsent"),
                 str("morphe_music_lyrics_chatgpt_add_account"), str("morphe_music_lyrics_chatgpt_select_account"),
                 str("morphe_music_lyrics_chatgpt_disconnect"), str("morphe_music_lyrics_chatgpt_cancel")};
-        new AlertDialog.Builder(getContext()).setTitle(str("morphe_music_lyrics_chatgpt_account_title"))
-                .setItems(actions, (dialog, which) -> {
+        AiChoiceDialog.show(getContext(), str("morphe_music_lyrics_chatgpt_account_title"), actions, which -> {
                     ChatGptSession session = ChatGptSession.get();
                     loginAccount = session.accountId();
                     switch (which) {
@@ -52,16 +50,16 @@ public final class ChatGptAccountPreference extends Preference {
                         case 5 -> session.cancelLogin();
                     }
                     update();
-                }).show();
+                });
     }
     private void selectAccount() {
         Utils.runOnBackgroundThread(() -> {
             try {
                 List<ChatGptSession.Account> accounts = ChatGptSession.get().accounts();
                 String[] labels = accounts.stream().map(ChatGptSession.Account::label).toArray(String[]::new);
-                Utils.runOnMainThread(() -> new AlertDialog.Builder(getContext())
-                        .setTitle(str("morphe_music_lyrics_chatgpt_select_account"))
-                        .setItems(labels, (dialog, which) -> Utils.runOnBackgroundThread(() -> {
+                Utils.runOnMainThread(() -> AiChoiceDialog.show(getContext(),
+                        str("morphe_music_lyrics_chatgpt_select_account"), labels,
+                        which -> Utils.runOnBackgroundThread(() -> {
                             try {
                                 ChatGptSession session = ChatGptSession.get();
                                 String previous = session.accountId();
@@ -70,7 +68,7 @@ public final class ChatGptAccountPreference extends Preference {
                             }
                             catch (Exception ignored) { }
                             Utils.runOnMainThread(this::update);
-                        })).show());
+                        })));
             } catch (Exception ex) { Utils.runOnMainThread(() -> completed("storage_error")); }
         });
     }

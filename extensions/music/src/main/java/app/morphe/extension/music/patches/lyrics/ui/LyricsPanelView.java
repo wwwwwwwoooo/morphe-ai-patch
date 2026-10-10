@@ -2714,9 +2714,8 @@ public final class LyricsPanelView extends FrameLayout implements LyricsManager.
         String[] actions = {str("morphe_music_lyrics_ai_original_only"),
                 str("morphe_music_lyrics_ai_translation_only"), str("morphe_music_lyrics_ai_original_translation"),
                 str("morphe_music_lyrics_ai_regenerate")};
-        new android.app.AlertDialog.Builder(getContext())
-                .setTitle(str("morphe_music_lyrics_ai_actions"))
-                .setItems(actions, (dialog, which) -> {
+        app.morphe.extension.music.settings.preference.AiChoiceDialog.show(getContext(),
+                str("morphe_music_lyrics_ai_actions"), actions, which -> {
                     if (lyrics == null) return;
                     if (which == 3) { regenerateAiTranslation(); return; }
                     clearRomanizeOnlyState();
@@ -2737,7 +2736,7 @@ public final class LyricsPanelView extends FrameLayout implements LyricsManager.
                         } else if (!translateInProgress) onTranslateClicked();
                     }
                     updateTranslateLabel();
-                }).show();
+                });
     }
 
     private void regenerateAiTranslation() {

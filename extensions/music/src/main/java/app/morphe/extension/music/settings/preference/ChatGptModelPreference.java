@@ -4,7 +4,6 @@
  */
 package app.morphe.extension.music.settings.preference;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.preference.Preference;
 import android.util.AttributeSet;
@@ -37,11 +36,10 @@ public final class ChatGptModelPreference extends Preference {
                     if (!account.equals(session.accountId())) return;
                     if (models.isEmpty()) { Utils.showToastLong(str("morphe_music_lyrics_ai_error_permission")); return; }
                     String[] names = models.stream().map(ResponsesClient.Model::name).toArray(String[]::new);
-                    new AlertDialog.Builder(getContext()).setTitle(str("morphe_music_lyrics_chatgpt_model_title"))
-                            .setItems(names, (dialog, which) -> {
-                                if (!account.equals(session.accountId())) return;
-                                Settings.LYRICS_CHATGPT_MODEL.save(models.get(which).slug()); update();
-                            }).show();
+                    AiChoiceDialog.show(getContext(), str("morphe_music_lyrics_chatgpt_model_title"), names, which -> {
+                        if (!account.equals(session.accountId())) return;
+                        Settings.LYRICS_CHATGPT_MODEL.save(models.get(which).slug()); update();
+                    });
                 });
             } catch (Exception ex) {
                 Utils.runOnMainThread(() -> {
