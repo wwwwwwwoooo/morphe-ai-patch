@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-10-10T02:13:29",
-  "description": "## LyricBridge 1.46.0 preview.1\n\nMorphe Patches v1.46.0 기반 사용자 지정 번들입니다. 기본 선택 OFF인 `AI synced lyrics translation` 패치(ChatGPT 계정/API 키 AI 가사 번역)를 추가했습니다.\n\n실제 계정 로그인과 기기 동작은 아직 검증되지 않았습니다.",
-  "download_url": "https://github.com/wwwwwwwoooo/morphe-ai-patch/raw/79347970cdb81fa94fb66b21ee4eb7773d8ae9c5/dist/lyricbridge-v1.46.0-preview.1/lyricbridge-lyrics-1.46.0.mpp",
+  "created_at": "2026-10-10T12:54:09",
+  "description": "## LyricBridge 1.46.1\n\nBuilt from ba6964752d48261963c6a23e47bbda9d3168a9e3.",
+  "download_url": "https://github.com/wwwwwwwoooo/morphe-ai-patch/releases/download/lyricbridge-v1.46.0-preview.2/lyricbridge-patches-1.46.1.mpp",
   "signature_download_url": "",
-  "version": "1.46.0"
+  "version": "1.46.1"
 }
