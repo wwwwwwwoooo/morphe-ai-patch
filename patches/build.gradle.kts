@@ -4,14 +4,13 @@ group = "app.morphe"
 
 patches {
     about {
-        name = providers.gradleProperty("patchBundleName").getOrElse("Morphe Patches")
-        description = if (providers.gradleProperty("patchBundleName").isPresent)
-            "Local AI lyrics extension build, based on MorpheApp/morphe-patches"
-        else "Patches for Morphe"
-        source = "git@github.com:MorpheApp/morphe-patches.git"
-        author = "MorpheApp"
+        // Distinct identity so Morphe Manager never confuses this fork with the official bundle.
+        name = providers.gradleProperty("patchBundleName").getOrElse("LyricBridge Patches")
+        description = "AI lyrics translation build, based on MorpheApp/morphe-patches"
+        source = "git@github.com:wwwwwwwoooo/morphe-ai-patch.git"
+        author = "wwwwwwwoooo"
         contact = "na"
-        website = "https://morphe.software"
+        website = "https://github.com/wwwwwwwoooo/morphe-ai-patch"
         license = "GNU General Public License v3.0, with additional GPL section 7 requirements"
     }
 }
