@@ -46,6 +46,14 @@ public final class TranslationFormat {
                 .put("id", id(i, lines.get(i))).put("text", lines.get(i)));
         return new JSONObject().put("title", title).put("artist", artist).put("segments", segments).toString();
     }
+    /** Removes a single surrounding markdown code fence, which many chat models add despite instructions. */
+    public static String unwrap(String response) {
+        String text = response.trim();
+        if (!text.startsWith("```") || !text.endsWith("```") || text.length() < 6) return response;
+        int start = text.indexOf('\n');
+        if (start < 0) return response;
+        return text.substring(start + 1, text.length() - 3).trim();
+    }
     public static List<String> parse(String json, List<String> lines) throws Exception {
         JSONTokener tokener = new JSONTokener(json);
         Object value = tokener.nextValue();
