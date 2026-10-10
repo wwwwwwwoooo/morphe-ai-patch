@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-10-10T12:54:09",
-  "description": "## LyricBridge 1.46.1\n\nBuilt from ba6964752d48261963c6a23e47bbda9d3168a9e3.",
-  "download_url": "https://github.com/wwwwwwwoooo/morphe-ai-patch/releases/download/lyricbridge-v1.46.0-preview.2/lyricbridge-patches-1.46.1.mpp",
+  "created_at": "2026-10-10T13:17:51",
+  "description": "## LyricBridge 1.46.2\n\nBuilt from 51f34351931489d4ca5137fff4a9106ba482a35d.",
+  "download_url": "https://github.com/wwwwwwwoooo/morphe-ai-patch/releases/download/lyricbridge-v1.46.0-preview.3/lyricbridge-patches-1.46.2.mpp",
   "signature_download_url": "",
-  "version": "1.46.1"
+  "version": "1.46.2"
 }
