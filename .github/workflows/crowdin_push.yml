@@ -1,12 +1,9 @@
 name: Crowdin push from GitHub
 
 on:
+  # Push trigger disabled: this fork has no `dev` branch or Crowdin project.
+  # Run manually if Crowdin is ever set up.
   workflow_dispatch:
-  push:
-    branches:
-      - dev
-    paths:
-      - patches/src/main/resources/addresources/values/**/strings.xml
 
 jobs:
   push:
