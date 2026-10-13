@@ -1,7 +1,7 @@
 name: Crowdin pull and merge
 on:
-  schedule:
-    - cron: "0 */12 * * *" # every 12 hours
+  # Scheduled runs disabled: this fork has no `dev` branch or Crowdin project,
+  # so the job failed every 12 hours. Run manually if Crowdin is ever set up.
   workflow_dispatch:
 
 jobs:
